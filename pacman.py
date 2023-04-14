@@ -134,7 +134,7 @@ while running:
                 puntos = puntos + 1
             if listapuntos[i][j]==0:
                 pygame.draw.circle(ventana,colorfondo,(j*anchocelda+anchocelda/2,i*altocelda+altocelda/2),2,width=1)
-    pygame.display.flip()
+#    pygame.display.flip()
 
 
     dibujacomecoco(PosComecoco[0],PosComecoco[1], colorComecoco)
