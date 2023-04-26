@@ -51,11 +51,16 @@ def dibujacoco(x,y,color):
     pygame.draw.circle(ventana,color,(x,y),20,width=0)
     rectpinky= pygame.Rect(x-20,y,40,20)
     pygame.draw.rect(ventana, color, rectpinky,width=0)
-    pygame.display.flip()
 
+def dibujalifes(vidas, color):
+    for i in range (vidas-1):
+        pygame.draw.circle(ventana,color,(1100+50*i,500),10,width=0)
+    
 def distancia(x0, y0, x1, y1):
     distancia = ((x1-x0)**2 + (y1-y0)**2)**0.5
     return distancia
+
+
 
 
 for j in range (nfilas):
@@ -87,7 +92,8 @@ for i in range (nfilas):
             pygame.draw.rect(ventana,coloreado4,rectangulo,width=1)
         else:
             pygame.draw.circle(ventana,coloreado2,(j*anchocelda+anchocelda/2,i*altocelda+altocelda/2),2,width=1)
-print (lista)
+
+#print (lista)
 
 
 for i in range (nfilas):
@@ -121,21 +127,13 @@ direcInky="left"
 direcClyde="rigt"
 
 marcador=0
-
+lifes=3
 retraso=0.03
+
+dibujalifes(lifes, coloreado2)
 
 running = True
 while running:
-    puntos=0
-    for i in range (nfilas):
-        for j in range (ncolumnas):
-            if listapuntos[i][j]==1:
-                pygame.draw.circle(ventana,coloreado2,(j*anchocelda+anchocelda/2,i*altocelda+altocelda/2),2,width=1)
-                puntos = puntos + 1
-            if listapuntos[i][j]==0:
-                pygame.draw.circle(ventana,colorfondo,(j*anchocelda+anchocelda/2,i*altocelda+altocelda/2),2,width=1)
-#    pygame.display.flip()
-
 
     dibujacomecoco(PosComecoco[0],PosComecoco[1], colorComecoco)
     dibujacoco(PosPinky[0],PosPinky[1], colorPinky)
@@ -144,6 +142,18 @@ while running:
     dibujacoco(PosClyde[0],PosClyde[1], colorClyde)
 
     pygame.display.flip()
+
+    puntos=0
+    for i in range (nfilas):
+        for j in range (ncolumnas):
+            if listapuntos[i][j]==1:
+                pygame.draw.circle(ventana,coloreado2,(j*anchocelda+anchocelda/2,i*altocelda+altocelda/2),2,width=1)
+                puntos = puntos + 1
+            if listapuntos[i][j]==0:
+                pygame.draw.circle(ventana,colorfondo,(j*anchocelda+anchocelda/2,i*altocelda+altocelda/2),2,width=1)
+
+    
+#    pygame.display.flip()
 
     time.sleep(retraso)
 
@@ -434,22 +444,48 @@ while running:
             saltoxClyde=saltoxantClyde
 
 
+    if distancia(PosPinky[0],PosPinky[1],PosComecoco[0],PosComecoco[1])<20 \
+    or distancia(PosInky[0],PosInky[1],PosComecoco[0],PosComecoco[1])<20 \
+    or distancia(PosBlinky[0],PosBlinky[1],PosComecoco[0],PosComecoco[1])<20 \
+    or distancia(PosClyde[0],PosClyde[1],PosComecoco[0],PosComecoco[1])<20:
+
+        dibujalifes(lifes,colorfondo)
+        lifes=lifes-1
+        dibujalifes(lifes,coloreado2)
+        
+        pygame.mixer.Sound.play(sonidosalida)
+        
+        dibujacomecoco((PosComecoco[0]),(PosComecoco[1]), colorfondo)
+        dibujacoco(PosPinky[0],PosPinky[1], colorfondo)
+        dibujacoco(PosBlinky[0],PosBlinky[1], colorfondo)
+        dibujacoco(PosInky[0],PosInky[1], colorfondo)
+        dibujacoco(PosClyde[0],PosClyde[1], colorfondo)
+
+        
+        PosComecoco=[5*anchocelda+anchocelda/2,5*altocelda+altocelda/2]
+        PosPinky=[11*anchocelda+anchocelda/2,11*altocelda+altocelda/2]
+        PosBlinky=[13*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
+        PosInky=[15*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
+        PosClyde=[17*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
+
+        direc="stop"
+        direcBlinky="right"
+        direcPinky="left"
+        direcInky="left"
+        direcClyde="rigt"
 
 
 
-    if distancia(PosPinky[0],PosPinky[1],PosComecoco[0],PosComecoco[1])<20:
-        pygame.mixer.Sound.play(sonidosalida)
-        running = False
-    if distancia(PosInky[0],PosInky[1],PosComecoco[0],PosComecoco[1])<20:
-        pygame.mixer.Sound.play(sonidosalida)
-        running = False
-    if distancia(PosBlinky[0],PosBlinky[1],PosComecoco[0],PosComecoco[1])<20:
-        pygame.mixer.Sound.play(sonidosalida)
-        running = False
-    if distancia(PosClyde[0],PosClyde[1],PosComecoco[0],PosComecoco[1])<20:
-        pygame.mixer.Sound.play(sonidosalida)
-        running = False
-                
+        time.sleep(2)
+
+        for i in range (nfilas):
+            for j in range (ncolumnas):
+                if lista[i][j]==0:
+                    rectangulo = pygame.Rect(j*anchocelda,i*altocelda,anchocelda,altocelda)
+                    pygame.draw.rect(ventana,coloreado4,rectangulo,width=1)
+        
+        if lifes==0:
+            running=False        
 
     # if listarandom[int(PosComecoco[0])][int(PosComecoco[1])] < 0.1 and not direcBlinky == "left":
     #     direcBlinky="right"
@@ -502,16 +538,6 @@ while running:
         direcClyde="down"
 
 
-
-    dibujacomecoco((PosComecoco[0]),(PosComecoco[1]), colorfondo)
-    dibujacoco(PosPinky[0],PosPinky[1], colorfondo)
-    dibujacoco(PosBlinky[0],PosBlinky[1], colorfondo)
-    dibujacoco(PosInky[0],PosInky[1], colorfondo)
-    dibujacoco(PosClyde[0],PosClyde[1], colorfondo)
-
-    pygame.display.flip()
-
-
 # CONTROL:
     fuente = pygame.font.SysFont('times new roman', 20)
     marcador1_surface = fuente.render('MARCADOR = '+ str(marcador) +'  ', True, coloreado2)
@@ -527,6 +553,19 @@ while running:
     pygame.draw.rect(ventana,colorfondo,marcador2_rect)
     ventana.blit(marcador2_surface, marcador2_rect)
 
+
+# BORRADO:
+
+    dibujacomecoco((PosComecoco[0]),(PosComecoco[1]), colorfondo)
+    dibujacoco(PosPinky[0],PosPinky[1], colorfondo)
+    dibujacoco(PosBlinky[0],PosBlinky[1], colorfondo)
+    dibujacoco(PosInky[0],PosInky[1], colorfondo)
+    dibujacoco(PosClyde[0],PosClyde[1], colorfondo)
+
+#    pygame.display.flip()
+
+# MOVIMIENTO:
+
     PosComecoco[0]=PosComecoco[0] + saltox
     PosComecoco[1]=PosComecoco[1] + saltoy
     PosBlinky[0]=PosBlinky[0] + saltoxBlinky
@@ -538,8 +577,16 @@ while running:
     PosClyde[0]=PosClyde[0] + saltoxClyde
     PosClyde[1]=PosClyde[1] + saltoyClyde
 
+
+# CAMBIO PANTALLA:
+
     if puntos==0:
         
+        if lifes < 3:
+            lifes = lifes+1
+
+        dibujalifes(lifes, coloreado2)
+
         fuente = pygame.font.SysFont('times new roman', 60)
         gameover_surface = fuente.render('NIVEL COMLETADO', True, coloreado2)
         gameover_rect = gameover_surface.get_rect()
@@ -554,14 +601,22 @@ while running:
         gameover_rect = gameover_surface.get_rect()
         gameover_rect.midtop = (tampantalla_x/2, tampantalla_y/2)
         ventana.blit(gameover_surface, gameover_rect)
+        
+        retraso=retraso*0.75
+        
+        for i in range (nfilas):
+            for j in range (ncolumnas):
+                if lista[i][j]==0:
+                    rectangulo = pygame.Rect(j*anchocelda,i*altocelda,anchocelda,altocelda)
+                    pygame.draw.rect(ventana,coloreado4,rectangulo,width=1)
+        
         pygame.display.flip()
 
-        retraso=retraso*0.75
         PosComecoco=[5*anchocelda+anchocelda/2,5*altocelda+altocelda/2]
         PosPinky=[11*anchocelda+anchocelda/2,11*altocelda+altocelda/2]
         PosBlinky=[13*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
-        PosInky=[15*anchocelda+anchocelda/2,15*altocelda+altocelda/2]
-        PosClyde=[17*anchocelda+anchocelda/2,15*altocelda+altocelda/2]
+        PosInky=[15*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
+        PosClyde=[17*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
 
         direc="stop"
         direcBlinky="right"
@@ -575,13 +630,6 @@ while running:
 
 
 
-        
-
-
-
-
-
-time.sleep(2)
 fuente = pygame.font.SysFont('times new roman', 60)
 gameover_surface = fuente.render('GAME OVER', True, coloreado2)
 gameover_rect = gameover_surface.get_rect()
