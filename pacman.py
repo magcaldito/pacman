@@ -86,6 +86,32 @@ def gameover():
     pygame.display.flip()
     time.sleep(3)
 
+def posinicial():
+    global PosComecoco, PosPinky, PosBlinky, PosInky, PosClyde
+    global direc, direcBlinky, direcPinky, direcInky, direcClyde
+    global salto, saltox, saltoy, saltoxPinky, saltoyPinky, saltoxBlinky, saltoyBlinky
+    global saltoxInky, saltoyInky, saltoxClyde, saltoyClyde
+    PosComecoco=[5*anchocelda+anchocelda/2,5*altocelda+altocelda/2]
+    PosPinky=[11*anchocelda+anchocelda/2,11*altocelda+altocelda/2]
+    PosBlinky=[13*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
+    PosInky=[15*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
+    PosClyde=[17*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
+    direc="stop"
+    direcBlinky="right"
+    direcPinky="left"
+    direcInky="left"
+    direcClyde="rigt"
+    salto=10
+    saltox=0
+    saltoy=0
+    saltoxPinky=0
+    saltoyPinky=0
+    saltoxBlinky=0
+    saltoyBlinky=0
+    saltoxInky=0
+    saltoyInky=0
+    saltoxClyde=0
+    saltoyClyde=0
 
 
 for i in range (nfilas):
@@ -107,43 +133,16 @@ for i in range (nfilas):
     for j in range (ncolumnas):
         listapuntos[i][j]=lista[i][j]
 
-
-
 dibujacaminos()
 
-
-
-PosComecoco=[5*anchocelda+anchocelda/2,5*altocelda+altocelda/2]
-PosPinky=[11*anchocelda+anchocelda/2,11*altocelda+altocelda/2]
-PosBlinky=[13*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
-PosInky=[15*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
-PosClyde=[17*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
-direc="stop"
-direcBlinky="right"
-direcPinky="left"
-direcInky="left"
-direcClyde="rigt"
-
-contador=0
-salto=10
-saltox=0
-saltoy=0
-saltoxPinky=0
-saltoyPinky=0
-saltoxBlinky=0
-saltoyBlinky=0
-saltoxInky=0
-saltoyInky=0
-saltoxClyde=0
-saltoyClyde=0
-
+posinicial()
 
 marcador=0
-lifes=5
+lifesmax=5
+lifes=lifesmax
 retraso=0.03
 
 dibujalifes(lifes, coloreado2)
-
 
 running = True
 
@@ -545,18 +544,9 @@ while running:
         pygame.mixer.Sound.play(sonidosalida)
         
         borrado()
+        time.sleep(1)
         
-        # POSINICIAL
-        PosComecoco=[5*anchocelda+anchocelda/2,5*altocelda+altocelda/2]
-        PosPinky=[11*anchocelda+anchocelda/2,11*altocelda+altocelda/2]
-        PosBlinky=[13*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
-        PosInky=[15*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
-        PosClyde=[17*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
-        direc="stop"
-        direcBlinky="right"
-        direcPinky="left"
-        direcInky="left"
-        direcClyde="rigt"
+        posinicial()
 
         time.sleep(2)
 
@@ -569,7 +559,7 @@ while running:
     # CAMBIO PANTALLA:
     if puntos==0:
         
-        if lifes < 3:
+        if lifes < lifesmax:
             lifes = lifes+1
 
         dibujalifes(lifes, coloreado2)
@@ -583,29 +573,21 @@ while running:
 
         time.sleep(2)
 
-        fuente = pygame.font.SysFont('times new roman', 60)
-        gameover_surface = fuente.render('NIVEL COMLETADO', True, colorfondo)
-        gameover_rect = gameover_surface.get_rect()
-        gameover_rect.midtop = (tampantalla_x/2, tampantalla_y/2)
-        ventana.blit(gameover_surface, gameover_rect)
+        # fuente = pygame.font.SysFont('times new roman', 60)
+        # gameover_surface = fuente.render('NIVEL COMLETADO', True, colorfondo)
+        # gameover_rect = gameover_surface.get_rect()
+        # gameover_rect.midtop = (tampantalla_x/2, tampantalla_y/2)
+        # ventana.blit(gameover_surface, gameover_rect)
         
+        ventana.fill(colorfondo)
+
         retraso=retraso*0.75
         
         dibujacaminos()
 
         pygame.display.flip()
 
-        # POSINICIAL
-        PosComecoco=[5*anchocelda+anchocelda/2,5*altocelda+altocelda/2]
-        PosPinky=[11*anchocelda+anchocelda/2,11*altocelda+altocelda/2]
-        PosBlinky=[13*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
-        PosInky=[15*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
-        PosClyde=[17*anchocelda+anchocelda/2,13*altocelda+altocelda/2]
-        direc="stop"
-        direcBlinky="right"
-        direcPinky="left"
-        direcInky="left"
-        direcClyde="rigt"
+        posinicial()
 
         for i in range (nfilas):
             for j in range (ncolumnas):
